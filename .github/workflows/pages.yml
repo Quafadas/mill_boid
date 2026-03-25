@@ -27,7 +27,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 26-ea
-          
+
       - run: mill project.publish
 
       - uses: actions/upload-pages-artifact@v3
