@@ -18,6 +18,7 @@ object project extends ScalaJsWebAppModule {
     mvn"io.github.quafadas::vecxt::0.0.38"
   )
 
+
   override def scalaJSExperimentalUseWebAssembly = true
 
   override def logFile = Task {
