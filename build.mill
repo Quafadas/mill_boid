@@ -1,7 +1,7 @@
 //| mill-version: 1.1.4
 //| mill-jvm-version: 21
 //| mvnDeps:
-//| - io.github.quafadas:sjsls_plugin_mill1_3.8:0.12.14-37-ea92e1-DIRTY4edc2ded
+//| - io.github.quafadas:sjsls_plugin_mill1_3.8:0.12.15
 
 
 import mill._
@@ -18,12 +18,7 @@ object project extends ScalaJsWebAppModule {
     mvn"io.github.quafadas::vecxt::0.0.38"
   )
 
-
   override def scalaJSExperimentalUseWebAssembly = true
-
-  override def logFile = Task {
-    Some( PathRef(Task.dest / "sjsls.log") )
-  }
 
   override def moduleSplitStyle: Simple[ModuleSplitStyle] = Task(){
   if (scalaJSExperimentalUseWebAssembly()) then ModuleSplitStyle.FewestModules
@@ -31,10 +26,5 @@ object project extends ScalaJsWebAppModule {
     ModuleSplitStyle.SmallModulesFor(
       "boid"
     )
-  }
-
-  def serveCommand = Task {
-    val publishDir = publish().path
-    s"""jwebserver -d "$publishDir" -p 8080"""
   }
 }
