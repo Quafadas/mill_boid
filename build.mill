@@ -3,14 +3,20 @@
 //| mvnDeps:
 //| - io.github.quafadas:sjsls_plugin_mill1_3.8:0.12.17
 
+
+
 package build
 
-import mill._
+import scalatags.Text.all.*
+
+import mill.Task
 import mill.scalalib._
 import mill.scalajslib._
+import mill.api.PathRef
 import io.github.quafadas.sjsls.ScalaJsInMemWebAppModule
 import mill.scalajslib.api.ModuleSplitStyle
 import mill.api.Task.Simple
+import mill.scalajslib.api.Report
 
 object `package` extends ScalaJsInMemWebAppModule {
   def scalaVersion = "3.8.2"
@@ -23,4 +29,38 @@ object `package` extends ScalaJsInMemWebAppModule {
       "boid"
     )
   }
+
+  def publish = Task {
+    val report = fullLinkJS()
+    val minifiedDir = report.dest.path
+    val doc = fullDocHtml(indexHtmlHead(), bodyHtmlFromReport(report))
+
+    os.write(Task.dest / "index.html", doc)
+    os.list(minifiedDir).foreach(f => os.copy(f, Task.dest / f.last, replaceExisting = true))
+    if os.exists(assetsDir) then os.copy(assets().path, Task.dest, mergeFolders = true)
+    end if
+    PathRef(Task.dest)
+  }
+
+  def bodyHtmlFromReport(report: Report, basePath: String = "./", includeRefresh: Boolean = false): String =
+    val scriptTags = report.publicModules.map(m => script(src := s"$basePath${m.jsFileName}", `type` := "module"))
+    body(
+      frag(scriptTags.toSeq*),
+      div(id := appRoot),
+      if includeRefresh then raw(refreshScript) else frag()
+    ).render
+  end bodyHtmlFromReport
+
+  def fullDocHtml(headHtml: String, bodyHtml: String): String =
+    "<!doctype html>\n" +
+      html(
+        raw(headHtml),
+        raw(bodyHtml)
+      ).render
+
+
+
+
 }
+
+
