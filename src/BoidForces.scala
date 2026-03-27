@@ -6,7 +6,7 @@ import vecxt.BoundsCheck.DoBoundsCheck.yes
 object BoidForces:
   import BoidConfig.*
 
-  def limitForce(fx: Double, fy: Double, maxForce: Double): (Double, Double) =        
+  def limitForce(fx: Double, fy: Double, maxForce: Double): (Double, Double) =
     val magnitude = math.hypot(fx, fy)
     if magnitude > maxForce && magnitude > 0 then
       (fx * maxForce / magnitude, fy * maxForce / magnitude)
@@ -26,7 +26,8 @@ object BoidForces:
   inline def calculateForces(
       positions: Matrix[Double],
       velocities: Matrix[Double],
-      boidIndex: Int
+      boidIndex: Int,
+      count: Int
   ): (Double, Double, Double, Double, Double, Double) =
     var sepX = 0.0
     var sepY = 0.0
@@ -46,7 +47,7 @@ object BoidForces:
     val boidVelY = velocities((boidIndex, 1))
 
     var j = 0
-    while j < numBoids do
+    while j < count do
       if j != boidIndex then
         val dx = boidX - positions((j, 0))
         val dy = boidY - positions((j, 1))

@@ -1,0 +1,30 @@
+.boid-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 8px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  font: 13px sans-serif;
+}
+
+.boid-panel label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.boid-panel .slider-value {
+  min-width: 36px;
+  text-align: right;
+}
+
+.boid-panel input[type="range"] {
+  width: 90px;
+}

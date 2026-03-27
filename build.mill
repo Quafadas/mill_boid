@@ -1,29 +1,25 @@
-//| mill-version: 1.1.4
+//| mill-version: 1.1.5
 //| mill-jvm-version: 21
 //| mvnDeps:
-//| - io.github.quafadas:sjsls_plugin_mill1_3.8:0.12.16
+//| - io.github.quafadas:sjsls_plugin_mill1_3.8:0.12.17
 
+package build
 
 import mill._
 import mill.scalalib._
 import mill.scalajslib._
-import io.github.quafadas.ScalaJsWebAppModule
+import io.github.quafadas.sjsls.ScalaJsInMemWebAppModule
 import mill.scalajslib.api.ModuleSplitStyle
 import mill.api.Task.Simple
 
-object project extends ScalaJsWebAppModule {
+object `package` extends ScalaJsInMemWebAppModule {
   def scalaVersion = "3.8.2"
   def mvnDeps = super.mvnDeps() ++ Seq(
     mvn"org.scala-js::scalajs-dom::2.8.1",
     mvn"io.github.quafadas::vecxt::0.0.38"
   )
 
-  override def scalaJSExperimentalUseWebAssembly = true
-
-  override def moduleSplitStyle: Simple[ModuleSplitStyle] = Task(){
-  if (scalaJSExperimentalUseWebAssembly()) then ModuleSplitStyle.FewestModules
-  else
-    ModuleSplitStyle.SmallModulesFor(
+  override def moduleSplitStyle: Simple[ModuleSplitStyle] = Task{ ModuleSplitStyle.SmallModulesFor(
       "boid"
     )
   }
